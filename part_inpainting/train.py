@@ -10,11 +10,12 @@ from missing_data import MissingData
 from net import InpaintNet
 import cv2
 from utils import get_part_mask, get_part_patch_box
-
+from torch.nn import functional as F
 def get_loss(img_mask, img_input, img_complete, output):
     # print(img_complete)
-    loss = torch.sum(torch.abs((img_complete - output) * img_mask)) /( torch.sum(img_mask))
-   
+    # loss = torch.sum(torch.abs((img_complete - output) * img_mask)) /( torch.sum(img_mask))
+    ## change loss
+    loss = F.smooth_l1_loss(img_complete[img_mask], output[img_mask])
     return loss
 
 
